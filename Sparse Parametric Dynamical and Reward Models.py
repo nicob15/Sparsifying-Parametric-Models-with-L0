@@ -102,7 +102,8 @@ metrics_sparsefcnn = train_eval_dynamics_model(sparsefcnn_model, optimizer_spars
 print("Best testing error sparse FCNN is {} and it was found at epoch {}".format(metrics_sparsefcnn[2], metrics_sparsefcnn[3]))
 
 degree = 3
-l0sindy_model = L0SINDy_dynamics(input_dim=obs_dim+act_dim, output_dim=obs_dim, degree=degree)
+reg_coefficient = 0.01
+l0sindy_model = L0SINDy_dynamics(input_dim=obs_dim+act_dim, output_dim=obs_dim, degree=degree, lambda_coeff=reg_coefficient)
 
 if torch.cuda.is_available():
     l0sindy_model = l0sindy_model.cuda()
@@ -111,7 +112,8 @@ optimizer_fcnn = torch.optim.Adam([
     {'params': l0sindy_model.parameters()},
 ], lr=lr, weight_decay=0.0)
 
-metrics_l0sindy = train_eval_dynamics_model(l0sindy_model, optimizer_fcnn, training_buffer, testing_buffer, batch_size, num_epochs)
+metrics_l0sindy = train_eval_dynamics_model(l0sindy_model, optimizer_fcnn, training_buffer, testing_buffer, batch_size,
+                                            num_epochs, l0=True)
 print("Best testing error L0 SINDy is {} and it was found at epoch {}".format(metrics_l0sindy[2], metrics_l0sindy[3]))
 
 
@@ -141,7 +143,7 @@ if not os.path.exists(save_dir):
 fig.savefig('figures/LearningDynamics.png', dpi=300)
 
 # learning the reward function of the pendulum
-
+from models import L0SINDy_reward
 from trainer import train_eval_reward_model
 
 h_dim = 64
@@ -176,7 +178,8 @@ metrics_sparsefcnn = train_eval_reward_model(sparsefcnn_model, optimizer_sparsef
 print("Best testing error sparse FCNN is {} and it was found at epoch {}".format(metrics_sparsefcnn[2], metrics_sparsefcnn[3]))
 
 degree = 3
-l0sindy_model = L0SINDy_dynamics(input_dim=obs_dim+act_dim, output_dim=1, degree=degree)
+reg_coefficient = 0.01
+l0sindy_model = L0SINDy_reward(input_dim=obs_dim+act_dim, output_dim=1, degree=degree, lambda_coeff=reg_coefficient)
 
 if torch.cuda.is_available():
     l0sindy_model = l0sindy_model.cuda()
@@ -185,7 +188,8 @@ optimizer_fcnn = torch.optim.Adam([
     {'params': l0sindy_model.parameters()},
 ], lr=lr, weight_decay=0.0)
 
-metrics_l0sindy = train_eval_reward_model(l0sindy_model, optimizer_fcnn, training_buffer, testing_buffer, batch_size, num_epochs)
+metrics_l0sindy = train_eval_reward_model(l0sindy_model, optimizer_fcnn, training_buffer, testing_buffer, batch_size,
+                                          num_epochs, l0=True)
 print("Best testing error L0 SINDy is {} and it was found at epoch {}".format(metrics_l0sindy[2], metrics_l0sindy[3]))
 
 
