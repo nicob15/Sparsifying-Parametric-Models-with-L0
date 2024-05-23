@@ -34,7 +34,6 @@ def train_eval_dynamics_model(model, optimizer, train_loader, test_loader, batch
                 loss = torch.nn.functional.mse_loss(next_obs, pred_next_obs)
                 total_loss = loss
             else:
-
                 loss = torch.nn.functional.mse_loss(next_obs, pred_next_obs)
                 reg = -(model.fc.regularization() + model.fc1.regularization() + model.fc2.regularization())
                 total_loss = loss + reg
