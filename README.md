@@ -6,7 +6,7 @@ Code accompanying the papers:
 Nicolò Botteghi and Urban Fasel. \
 The paper has been accepted to the 63rd IEEE Conference on Decision and Control and can be found at: [Link](https://arxiv.org/pdf/2403.15267)
 
-![alt text](Figure_1.png)
+![alt text](Figure1.png)
 
 **[2] Sparsifying Parametric Models with L$_0$ Regularization** \
 Nicolò Botteghi and Urban Fasel \
